@@ -1,4 +1,3 @@
 # Asteroids
 2D Game. 
-
-tkinter, livewares.
+Using libs: tkinter, livewares.
