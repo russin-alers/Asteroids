@@ -1,6 +1,6 @@
 from  livewires import games
 import random
-#sdf jhsdk fjsdlf sdk fs
+
 
 games.init(screen_height= 480,
            screen_width=640,
