@@ -1,7 +1,6 @@
 from  livewires import games
 import random
 
-
 games.init(screen_height= 480,
            screen_width=640,
            fps=50)
