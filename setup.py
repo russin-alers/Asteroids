@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='Asteroids',
     version='1.0',
-    packages=[''],
+    packages=['tkinter, livewares'],
     url='https://github.com/russin-alers/Asteroids',
     license='',
     author='AsH',
