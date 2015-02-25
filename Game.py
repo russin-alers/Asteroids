@@ -1,8 +1,8 @@
 from  livewires import games
 import random, math
 
-games.init(screen_height= 480,
-           screen_width=640,
+games.init(screen_height= 768,
+           screen_width=1024,
            fps=50)
 
 class Asteroid(games.Sprite):
