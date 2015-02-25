@@ -5,6 +5,40 @@ games.init(screen_height= 768,
            screen_width=1024,
            fps=50)
 
+class Wrap(games.Sprite):
+
+    def update(self):
+
+        if self.top > games.screen.height:
+            self.bottom = 0
+
+        if self.bottom < 0:
+            self.top = games.screen.height
+
+        if self.left > games.screen.width:
+            self.right = 0
+
+        if self.right < 0:
+            self.left = games.screen.width
+
+    def die(self):
+        self.destroy()
+
+class Collide(Wrap):
+
+    def update(self):
+        super(Collide,self).update()
+
+        if self.overlapping_sprites:
+            for sprite in self.overlapping_sprites:
+                sprite.die()
+            self.die()
+
+    def die(self):
+        new_explosion = Explosion(x=self.x,y=self.y)
+        games.screen.add(new_explosion)
+        self.destroy()
+
 
 class Explosion(games.Animation):
     sound = games.load_sound("sounds/explosion.wav")
@@ -31,7 +65,7 @@ class Explosion(games.Animation):
 
 
 
-class Asteroid(games.Sprite):
+class Asteroid(Wrap):
     """Asteroid"""
     SIZE_SMALL = 1
     SIZE_MEDIUM = 2
@@ -51,20 +85,8 @@ class Asteroid(games.Sprite):
             dy=random.choice([1,-1])* Asteroid.SPEED * random.random()/size)
         self.size = size
 
-    def update(self):
-
-        if self.top > games.screen.height:
-            self.bottom = 0
-        if self.bottom < 0:
-            self.top = games.screen.height
-        if self.left > games.screen.width:
-            self.right = 0
-        if self.right < 0:
-            self.left = games.screen.width
-
-
-
     def die(self):
+        super().die()
         if self.size != Asteroid.SIZE_SMALL:
             for i in range(Asteroid.SPAWN):
                 new_asteroid = Asteroid(x=self.x,
@@ -73,10 +95,10 @@ class Asteroid(games.Sprite):
                 games.screen.add(new_asteroid)
         self.destroy()
 
-class Missile(games.Sprite):
+class Missile(Collide):
     image = games.load_image("icons/missile.bmp")
     sound = games.load_sound("sounds/missile.wav")
-    LIFETIME = 40
+    LIFETIME = 20
     BUFFER = 90
     M_ACCELERATION = 7
 
@@ -103,24 +125,13 @@ class Missile(games.Sprite):
         self.lifetime = Missile.LIFETIME
 
     def update(self):
-
-        if self.overlapping_sprites:
-           for sprite in self.overlapping_sprites:
-               sprite.die()
-           self.die()
+        super(Missile,self).update()
 
         self.lifetime -=1
-        #if self.lifetime == 0:
-            #self.destrroy()
+        if self.lifetime == 0:
+            self.destroy()
 
-    def die(self):
-        new_explosion = Explosion(x=self.x,y=self.y)
-        games.screen.add(new_explosion)
-        self.destroy()
-
-
-
-class Ship(games.Sprite):
+class Ship(Collide):
     """Spaceship"""
     SHIP_SPEED = 1
     SHIP_ROTATION_STEP = 2
@@ -134,16 +145,7 @@ class Ship(games.Sprite):
         self.missile_wait = 0
 
     def update(self):
-        """Moves and rotation"""
-        if self.top > games.screen.height:
-            self.bottom = 0
-        if self.bottom < 0:
-            self.top = games.screen.height
-        if self.left > games.screen.width:
-            self.right = 0
-        if self.right < 0:
-            self.left = games.screen.width
-
+        super(Ship,self).update()
         if games.keyboard.is_pressed(games.K_UP):
             self.y -= 1
             Ship.move_sound.play()
@@ -161,16 +163,6 @@ class Ship(games.Sprite):
 
         if self.missile_wait > 0:
             self.missile_wait -= 1
-
-        if self.overlapping_sprites:
-            for sprite in self.overlapping_sprites:
-                sprite.die()
-            self.die()
-
-    def die(self):
-        new_explosion = Explosion(x=self.x,y=self.y)
-        games.screen.add(new_explosion)
-        self.destroy()
 
 def main():
     background = games.load_image("icons/background.jpg", transparent=False)
