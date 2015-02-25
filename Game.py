@@ -98,7 +98,7 @@ class Asteroid(Wrap):
 class Missile(Collide):
     image = games.load_image("icons/missile.bmp")
     sound = games.load_sound("sounds/missile.wav")
-    LIFETIME = 20
+    LIFETIME = 50
     BUFFER = 90
     M_ACCELERATION = 7
 
