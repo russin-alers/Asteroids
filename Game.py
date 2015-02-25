@@ -5,11 +5,39 @@ games.init(screen_height= 768,
            screen_width=1024,
            fps=50)
 
+
+class Explosion(games.Animation):
+    sound = games.load_sound("sounds/explosion.wav")
+    exp_images = ["icons/exp-1.bmp",
+                  "icons/exp-1_1.bmp",
+                  "icons/exp-2.bmp",
+                  "icons/exp-3.bmp",
+                  "icons/exp-4.bmp",
+                  "icons/exp-5.bmp",
+                  "icons/exp-6.bmp",
+                  "icons/exp-7.bmp",
+                  "icons/exp-7_1.bmp",
+                  "icons/exp-8.bmp",
+                  "icons/exp-10.bmp",
+                  "icons/exp-11.bmp"]
+
+    def __init__(self, x,y):
+        super().__init__(images=Explosion.exp_images,
+                         x=x, y=y,
+                         repeat_interval=4,
+                         n_repeats=1,
+                         is_collideable=False)
+        Explosion.sound.play()
+
+
+
 class Asteroid(games.Sprite):
     """Asteroid"""
     SIZE_SMALL = 1
     SIZE_MEDIUM = 2
     SIZE_LARGE = 3
+    SPAWN = 2
+
     images = {SIZE_SMALL: games.load_image("icons/asteroid_small.bmp"),
               SIZE_MEDIUM: games.load_image("icons/asteroid_med.bmp"),
               SIZE_LARGE: games.load_image("icons/asteroid_big.bmp")}
@@ -34,11 +62,22 @@ class Asteroid(games.Sprite):
         if self.right < 0:
             self.left = games.screen.width
 
+
+
+    def die(self):
+        if self.size != Asteroid.SIZE_SMALL:
+            for i in range(Asteroid.SPAWN):
+                new_asteroid = Asteroid(x=self.x,
+                                        y=self.y,
+                                        size=self.size-1)
+                games.screen.add(new_asteroid)
+        self.destroy()
+
 class Missile(games.Sprite):
     image = games.load_image("icons/missile.bmp")
     sound = games.load_sound("sounds/missile.wav")
     LIFETIME = 40
-    BUFFER = 40
+    BUFFER = 90
     M_ACCELERATION = 7
 
     def __init__(self, ship_x, ship_y, ship_angle):
@@ -65,9 +104,20 @@ class Missile(games.Sprite):
 
     def update(self):
 
+        if self.overlapping_sprites:
+           for sprite in self.overlapping_sprites:
+               sprite.die()
+           self.die()
+
         self.lifetime -=1
         #if self.lifetime == 0:
             #self.destrroy()
+
+    def die(self):
+        new_explosion = Explosion(x=self.x,y=self.y)
+        games.screen.add(new_explosion)
+        self.destroy()
+
 
 
 class Ship(games.Sprite):
@@ -111,6 +161,16 @@ class Ship(games.Sprite):
 
         if self.missile_wait > 0:
             self.missile_wait -= 1
+
+        if self.overlapping_sprites:
+            for sprite in self.overlapping_sprites:
+                sprite.die()
+            self.die()
+
+    def die(self):
+        new_explosion = Explosion(x=self.x,y=self.y)
+        games.screen.add(new_explosion)
+        self.destroy()
 
 def main():
     background = games.load_image("icons/background.jpg", transparent=False)
