@@ -56,7 +56,7 @@ class Missile(games.Sprite):
         dx = Missile.M_ACCELERATION * math.sin(angle)
         dy = Missile.M_ACCELERATION * -math.cos(angle)
 
-        super(Missile, self).__init__(image=Missile.image,
+        super().__init__(image=Missile.image,
                                       x=x, y=y,
                                       dx=dx, dy=dy,
                                       angle = ship_angle)
@@ -80,7 +80,7 @@ class Ship(games.Sprite):
     move_sound = games.load_sound("sounds/thrust.wav")
 
     def __init__(self,x,y):
-        super(Ship, self).__init__(image=Ship.ship_image, x=x,y=y)
+        super().__init__(image=Ship.ship_image, x=x,y=y)
         self.missile_wait = 0
 
     def update(self):
