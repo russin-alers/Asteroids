@@ -1,6 +1,8 @@
-from Asteroid import *
-from Explosion import *
 import math
+
+from src.Asteroid import *
+from src.Explosion import *
+
 
 class Missile(Wrap):
     image = games.load_image("icons/missile.bmp")

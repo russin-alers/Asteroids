@@ -1,5 +1,7 @@
-from Wrap import *
 import random
+
+from src.Wrap import *
+
 
 class Asteroid(Wrap):
     """Asteroid"""
