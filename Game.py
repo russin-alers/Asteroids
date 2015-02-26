@@ -25,14 +25,6 @@ class Wrap(games.Sprite):
     def die(self):
         self.destroy()
 
-class Collide(Wrap):
-
-
-    def die(self):
-        new_explosion = Explosion(x=self.x,y=self.y)
-        games.screen.add(new_explosion)
-        self.destroy()
-
 
 class Explosion(games.Animation):
     sound = games.load_sound("sounds/explosion.wav")
@@ -103,7 +95,7 @@ class Asteroid(Wrap):
         #self.destroy()
         super().die()
 
-class Missile(Collide):
+class Missile(Wrap):
     image = games.load_image("icons/missile.bmp")
     sound = games.load_sound("sounds/missile.wav")
     LIFETIME = 100
@@ -137,7 +129,10 @@ class Missile(Collide):
 
         if self.overlapping_sprites:
             for sprite in self.overlapping_sprites:
-                sprite.die()
+                if isinstance(sprite, Asteroid):
+                    sprite.die()
+                    new_explosion = Explosion(x=self.x,y=self.y)
+                    games.screen.add(new_explosion)
             self.die()
 
 
@@ -145,7 +140,7 @@ class Missile(Collide):
         if self.lifetime == 0:
             self.destroy()
 
-class Ship(Collide):
+class Ship(Wrap):
     """Spaceship"""
     SHIP_SPEED = 1
     SHIP_ROTATION_STEP = 2
@@ -186,7 +181,11 @@ class Ship(Collide):
 
         if self.overlapping_sprites:
             for sprite in self.overlapping_sprites:
-                sprite.die()
+                if isinstance(sprite, Asteroid):
+                    sprite.die()
+                    new_explosion = Explosion(x=self.x,y=self.y)
+                    games.screen.add(new_explosion)
+
             self.game.end()
             self.die()
         """if self.overlapping_sprites:
@@ -235,22 +234,29 @@ class Game(object):
 
         for i in range(self.level):
 
-            x_min = random.randrange(BUFFER)
-            y_min = BUFFER - x_min
+                x_min = random.randrange(BUFFER)
+                y_min = BUFFER - x_min
 
-            x_distance = random.randrange(x_min, games.screen.width - x_min)
-            y_distance = random.randrange(y_min, games.screen.height - y_min)
+                x_distance = random.randrange(x_min, games.screen.width - x_min)
+                y_distance = random.randrange(y_min, games.screen.height - y_min)
 
-            x = self.ship.x + x_distance
-            y = self.ship.y + y_distance
+                x = self.ship.x + x_distance
+                y = self.ship.y + y_distance
 
-            x %= games.screen.width
-            y %= games.screen.height
+                x %= games.screen.width
+                y %= games.screen.height
 
-            new_asteroid = Asteroid(game = self,
-                                    x=x, y=y,
-                                    size=Asteroid.SIZE_LARGE)
-            games.screen.add(new_asteroid)
+                #if i !=2:
+                new_asteroid = Asteroid(game = self,
+                                        x=x, y=y,
+                                        size=Asteroid.SIZE_LARGE)
+                games.screen.add(new_asteroid)
+                #else:
+                #    new_ship = Ship(game=self,
+                #                    x=x,y=y)
+                #    games.screen.add(new_ship)
+
+
 
         level_message = games.Message(value= "Level" + str(self.level),
                                       size= 40,
