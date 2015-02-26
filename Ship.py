@@ -1,8 +1,8 @@
 import math
 
-from src.Missile import *
-from src.Asteroid import *
-from src.Explosion import *
+from Missile import *
+from Asteroid import *
+from Explosion import *
 
 
 class Ship(Wrap):

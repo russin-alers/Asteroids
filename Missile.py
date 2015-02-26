@@ -1,7 +1,7 @@
 import math
 
-from src.Asteroid import *
-from src.Explosion import *
+from Asteroid import *
+from Explosion import *
 
 
 class Missile(Wrap):

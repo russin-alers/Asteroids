@@ -1,7 +1,7 @@
 from  livewires import  color
 
-from src.Ship import *
-from src.Asteroid import *
+from Ship import *
+from Asteroid import *
 
 class Game(object):
 
