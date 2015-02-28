@@ -38,7 +38,10 @@ class Game(object):
         games.screen.mainloop()
 
     def advance(self):
-        self.levels.asteroid_level()
+        if Levels.level == 3:
+            self.levels.boss_level()
+        else:
+            self.levels.asteroid_level()
 
 
 
