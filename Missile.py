@@ -2,12 +2,13 @@ import math
 
 from Asteroid import *
 from Explosion import *
+from Boss import *
 
 
 class Missile(Wrap):
     image = games.load_image("icons/missile.bmp")
     sound = games.load_sound("sounds/missile.wav")
-    LIFETIME = 100
+    LIFETIME = 70
     BUFFER = 90
     M_ACCELERATION = 7
 
@@ -42,7 +43,17 @@ class Missile(Wrap):
                     sprite.die()
                     new_explosion = Explosion(x=self.x,y=self.y)
                     games.screen.add(new_explosion)
-            self.die()
+                self.die()
+                if isinstance(sprite,Boss ):
+                    self.die()
+                    new_explosion = Explosion(x=self.x,y=self.y)
+                    games.screen.add(new_explosion)
+                    Boss.HITS_TO_KILL += 1
+                    print(Boss.HITS_TO_KILL)
+                    if Boss.HITS_TO_KILL == 20:
+                        sprite.die()
+
+
 
 
         self.lifetime -=1
