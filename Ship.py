@@ -9,7 +9,7 @@ class Ship(Wrap):
     """Spaceship"""
     SHIP_SPEED = 1
     SHIP_ROTATION_STEP = 2
-    ACCELERTATION = .03
+    ACCELERATION = .03
     MISSILE_DELAY = 20
     VELOCITY_MAX = 3
     ship_image = games.load_image("icons/ship.bmp")
@@ -26,8 +26,8 @@ class Ship(Wrap):
             self.y -= 1
             Ship.move_sound.play()
             angle = self.angle * math.pi / 180
-            self.dx += Ship.ACCELERTATION * math.sin(angle)
-            self.dy += Ship.ACCELERTATION * -math.cos(angle)
+            self.dx += Ship.ACCELERATION * math.sin(angle)
+            self.dy += Ship.ACCELERATION * -math.cos(angle)
 
             self.dx = min(max(self.dx, -Ship.VELOCITY_MAX), Ship.VELOCITY_MAX)
             self.dy = min(max(self.dy, -Ship.VELOCITY_MAX), Ship.VELOCITY_MAX)
@@ -44,15 +44,15 @@ class Ship(Wrap):
         if self.missile_wait > 0:
             self.missile_wait -= 1
 
-        if self.overlapping_sprites:
+        """if self.overlapping_sprites:
             for sprite in self.overlapping_sprites:
                 if isinstance(sprite, Asteroid):
                     sprite.die()
                     new_explosion = Explosion(x=self.x,y=self.y)
-                    games.screen.add(new_explosion)
+                    games.screen.add(new_explosion
 
             self.game.end()
-            self.die()
+            self.die()"""
         """if self.overlapping_sprites:
             for sprite in self.overlapping_sprites:
                 if isinstance(sprite, Missile):

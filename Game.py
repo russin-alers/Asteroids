@@ -38,11 +38,24 @@ class Game(object):
         games.screen.mainloop()
 
     def advance(self):
-        if Levels.level == 3:
+
+        """if Levels.level == 0:
+            self.levels.asteroid_level()"""
+        if Levels.level % 3 == 0:
             self.levels.boss_level()
         else:
             self.levels.asteroid_level()
 
+        level_message = games.Message(value= "Level" + str(Levels.level),
+                                      size= 40,
+                                      color=color.yellow,
+                                      x=games.screen.width/2,
+                                      y=games.screen.height/10,
+                                      lifetime= 3 * games.screen.fps,
+                                      is_collideable=False)
+        games.screen.add(level_message)
+        if Levels.level > 1:
+            self.sound.play()
 
 
     def end(self):
